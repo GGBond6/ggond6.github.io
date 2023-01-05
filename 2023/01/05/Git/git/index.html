@@ -1,0 +1,642 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Git使用技巧 | GGBond's Blog</title><meta name="keywords" content="technology"><meta name="author" content="GGBond"><meta name="copyright" content="GGBond"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Git1. Git简介Git是分布式版本控制系统（distributed version control system，简称DVCS），分为本地仓库和远程仓库  2. Git工作流程 clone与pull的区别 clone操作是一个从无到有的克隆操作（只执行一次）。因此不需要本地进行git init初始化 git pull是拉取远程分支更新到本地仓库的操作（要执行很多次）。事实上，git pull">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Git使用技巧">
+<meta property="og:url" content="https://upeveryday.cn/2023/01/05/Git/git/index.html">
+<meta property="og:site_name" content="GGBond&#39;s Blog">
+<meta property="og:description" content="Git1. Git简介Git是分布式版本控制系统（distributed version control system，简称DVCS），分为本地仓库和远程仓库  2. Git工作流程 clone与pull的区别 clone操作是一个从无到有的克隆操作（只执行一次）。因此不需要本地进行git init初始化 git pull是拉取远程分支更新到本地仓库的操作（要执行很多次）。事实上，git pull">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://dn-coding-net-production-pp.codehub.cn/d4d43177-bb4b-4ae3-aca9-af11bf1a1693.png">
+<meta property="article:published_time" content="2023-01-05T10:05:05.936Z">
+<meta property="article:modified_time" content="2023-01-05T10:05:05.936Z">
+<meta property="article:author" content="GGBond">
+<meta property="article:tag" content="technology">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://dn-coding-net-production-pp.codehub.cn/d4d43177-bb4b-4ae3-aca9-af11bf1a1693.png"><link rel="shortcut icon" href="/img/ggbond.jpg"><link rel="canonical" href="https://upeveryday.cn/2023/01/05/Git/git/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":50,"languages":{"author":"作者: GGBond","link":"链接: ","source":"来源: GGBond's Blog","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isanchor: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Git使用技巧',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-01-05 10:05:05'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    document.addEventListener('pjax:complete', detectApple)})(window)</script><link rel="stylesheet" href="css\style.css"><meta name="generator" content="Hexo 5.4.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/ggbond.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">10</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">2</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">10</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://dn-coding-net-production-pp.codehub.cn/d4d43177-bb4b-4ae3-aca9-af11bf1a1693.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">GGBond's Blog</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Git使用技巧</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-01-05T10:05:05.936Z" title="发表于 2023-01-05 10:05:05">2023-01-05</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-01-05T10:05:05.936Z" title="更新于 2023-01-05 10:05:05">2023-01-05</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Git/">Git</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">6.8k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>22分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Git使用技巧"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="Git"><a href="#Git" class="headerlink" title="Git"></a>Git</h1><h2 id="1-Git简介"><a href="#1-Git简介" class="headerlink" title="1. Git简介"></a>1. Git简介</h2><p>Git是<font color='red'>分布式版本控制系统</font>（distributed version control system，简称DVCS），分为本地仓库和远程仓库</p>
+<p><img src="http://cdn.upeveryday.cn/img/image-20210601002731835.png" alt="image-20210601002731835"></p>
+<h2 id="2-Git工作流程"><a href="#2-Git工作流程" class="headerlink" title="2. Git工作流程"></a>2. Git工作流程</h2><p><img src="http://cdn.upeveryday.cn/img/image-20210601004713183.png" alt="image-20210601004713183"></p>
+<h3 id="clone与pull的区别"><a href="#clone与pull的区别" class="headerlink" title="clone与pull的区别"></a>clone与pull的区别</h3><ol>
+<li>clone操作是一个从无到有的<strong>克隆</strong>操作（只执行一次）。因此不需要本地进行<code>git init</code>初始化</li>
+<li>git pull是拉取远程分支更新到本地仓库的操作（要执行很多次）。事实上，git pull是相当于从远程仓库获取最新版本，然后再与本地分支merge（合并）。</li>
+</ol>
+<p><code>git init</code>把当前目录变成Git可以管理的仓库</p>
+<p><code>git add</code>把文件添加到仓库</p>
+<p>​    <code>git add .</code>添加文件下所有文件及文件夹</p>
+<p><code>git commit -m &quot;comment&quot;</code>把文件提交到仓库</p>
+<blockquote>
+<p>为什么Git添加文件需要<code>add</code>，<code>commit</code>一共两步呢？因为<code>commit</code>可以一次提交很多文件，所以你可以多次<code>add</code>不同的文件，比如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git add file1.txt</span><br><span class="line">$ git add file2.txt file3.txt</span><br><span class="line">$ git commit -m &quot;add 3 files.&quot;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<p><code>git status</code>查看仓库当前的状态</p>
+<p><code>git diff</code>查看修改之后的不同（difference）</p>
+<h2 id="版本回退"><a href="#版本回退" class="headerlink" title="版本回退"></a>版本回退</h2><p>穿梭前，用<code>git log --pretty=oneline</code>可以查看提交历史，以便确定要回退到哪个版本。</p>
+<p><code>HEAD</code>指向的版本就是当前版本，因此，Git允许我们在版本的历史之间穿梭，使用命令<code>git reset --hard commit_id</code>。</p>
+<p>要重返未来，用<code>git reflog</code>查看命令历史，以便确定要回到未来的哪个版本。</p>
+<h2 id="工作区和版本库"><a href="#工作区和版本库" class="headerlink" title="工作区和版本库"></a>工作区和版本库</h2><p><strong>工作区</strong>：<code>git init</code>把当前目录变成工作区</p>
+<p><strong>版本库</strong>：工作区的隐藏目录<code>.git</code>，是Git的版本库。</p>
+<p>Git的版本库里存了很多东西，其中最重要的就是称为stage（或者叫index）的<strong>暂存区</strong>，还有Git为我们自动创建的第一个分支<code>master</code>，以及指向<code>master</code>的一个指针叫<code>HEAD</code>。</p>
+<p><img src="https://www.liaoxuefeng.com/files/attachments/919020037470528/0" alt="img"></p>
+<blockquote>
+<p>第一步是用<code>git add</code>把文件添加进去，实际上就是把文件修改添加到暂存区；</p>
+<p>第二步是用<code>git commit</code>提交更改，实际上就是把暂存区的所有内容提交到当前分支。</p>
+</blockquote>
+<h2 id="撤销修改"><a href="#撤销修改" class="headerlink" title="撤销修改"></a>撤销修改</h2><p>场景1：当你改乱了工作区某个文件的内容，想直接丢弃工作区的修改时，用命令<code>git restore &lt;file&gt;</code>。</p>
+<p>场景2：当你不但改乱了工作区某个文件的内容，还添加到了暂存区时，想丢弃修改，分两步，第一步用命令<code>git restore --staged &lt;file&gt;</code>，就回到了场景1，第二步按场景1操作。</p>
+<p>场景3：已经提交了不合适的修改到版本库时，想要撤销本次提交，参考版本回退一节，不过前提是没有推送到远程库。</p>
+<h2 id="删除文件"><a href="#删除文件" class="headerlink" title="删除文件"></a>删除文件</h2><p><code>rm file</code>删除文件</p>
+<p>现在你有两个选择，一是确实要从版本库中删除该文件，那就用命令<code>git rm file</code>删掉，并且<code>git commit</code></p>
+<p>另一种情况是删错了，因为版本库里还有呢，所以可以很轻松地把误删的文件恢复到最新版本：<code>&quot;git restore &lt;file&gt;</code></p>
+<h2 id="添加远程库"><a href="#添加远程库" class="headerlink" title="添加远程库"></a>添加远程库</h2><p>第1步：创建SSH Key。在用户主目录下（<code>cd ~</code>然后<code>pwd</code>，即可看到用户主目录路径<code>C:\Users\ThinkPad\.ssh</code>），看看有没有.ssh目录，如果有，再看看这个目录下有没有<code>id_rsa</code>和<code>id_rsa.pub</code>这两个文件，如果已经有了，可直接跳到下一步。如果没有，打开Shell（Windows下打开Git Bash），创建SSH Key：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa -C &quot;youremail@example.com&quot;</span><br></pre></td></tr></table></figure>
+
+<p>把邮件地址换成自己的，然后一路回车，都使用默认值即可</p>
+<p>如果一切顺利的话，可以在用户主目录里找到<code>.ssh</code>目录，里面有<code>id_rsa</code>和<code>id_rsa.pub</code>两个文件，这两个就是<strong>SSH Key的秘钥对</strong>，<code>id_rsa</code>是私钥，不能泄露出去，<code>id_rsa.pub</code>是公钥，可以放心地告诉任何人。</p>
+<p>第2步：登陆GitHub，打开“Account settings”，“SSH Keys”页面：</p>
+<p>然后，点“Add SSH Key”，填上任意Title，在Key文本框里粘贴<code>id_rsa.pub</code>文件的内容</p>
+<h2 id="关联-amp-提交远程库"><a href="#关联-amp-提交远程库" class="headerlink" title="关联&amp;提交远程库"></a>关联&amp;提交远程库</h2><p>要关联一个远程库，使用命令<code>git remote add blog git@github.com:GGBond6/push_blog.git</code>；</p>
+<p>关联一个远程库时必须给远程库指定一个名字，<code>origin</code>是默认习惯命名；</p>
+<p>关联后，使用命令<code>git push -u origin master</code>第一次推送master分支的所有内容；</p>
+<p>此后，每次本地提交后，只要有必要，就可以使用命令<code>git push origin master</code>推送最新修改；</p>
+<h2 id="解绑远程库"><a href="#解绑远程库" class="headerlink" title="解绑远程库"></a>解绑远程库</h2><p><strong>查看本地已经关联的远程库：</strong><code>git remote -v</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git remote remove origin</span><br></pre></td></tr></table></figure>
+
+<h2 id="克隆远程库"><a href="#克隆远程库" class="headerlink" title="克隆远程库"></a>克隆远程库</h2><p>要克隆一个仓库，首先必须知道仓库的地址，然后使用<code>git clone</code>命令克隆。</p>
+<p>Git支持多种协议，包括<code>https</code>，但<code>ssh</code>协议速度最快。</p>
+<h2 id="分支管理"><a href="#分支管理" class="headerlink" title="分支管理"></a>分支管理</h2><p>查看分支：<code>git branch</code></p>
+<p>查看项目的分支们(包括本地和远程)：<code>git branch -a</code></p>
+<p>删除本地分支：<code>git branch -d &lt;name&gt;</code></p>
+<p>删除远程分支：<code>git push origin --delete &lt;Name&gt;</code></p>
+<p>创建分支：<code>git branch &lt;name&gt;</code></p>
+<p>切换分支：<code>git switch &lt;name&gt;</code></p>
+<p>创建+切换分支：<code>git switch -c &lt;name&gt;</code></p>
+<p>合并某分支到当前分支：<code>git merge &lt;name&gt;</code></p>
+<p>重命名分支<code>git branch -M &lt;name&gt;</code></p>
+<h2 id="同一客户端下使用多个git账号"><a href="#同一客户端下使用多个git账号" class="headerlink" title="同一客户端下使用多个git账号"></a>同一客户端下使用多个git账号</h2><h3 id="1-生成新的-SSH-keys"><a href="#1-生成新的-SSH-keys" class="headerlink" title="1. 生成新的 SSH keys"></a>1. 生成新的 SSH keys</h3><p>在用户主目录下（<code>cd ~</code>然后<code>pwd</code>，即可看到用户主目录路径）的.ssh目录中打开git bash</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa -C &quot;ggbondd@aliyun.com&quot;</span><br><span class="line">ssh-keygen -t rsa -C &quot;2376940495@qq.com&quot;</span><br></pre></td></tr></table></figure>
+
+<p>在生成第一组 <strong>id_rsa</strong> 和 <strong>id_rsa.pub_</strong> 可以选用默认的文件名，在出现提示输入文件名的时候要输入一个不同的文件名，<strong>比如：</strong>这里填的是 <code>id_rsa_new</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Enter file in which to save the key (~/.ssh/id_rsa): id_rsa_new</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-将公钥添加到GitHub的-SSH-设置中"><a href="#2-将公钥添加到GitHub的-SSH-设置中" class="headerlink" title="2. 将公钥添加到GitHub的 SSH 设置中"></a>2. 将公钥添加到GitHub的 SSH 设置中</h3><h3 id="3-配置-ssh-config-文件"><a href="#3-配置-ssh-config-文件" class="headerlink" title="3. 配置 ~/.ssh/config 文件"></a>3. 配置 ~/.ssh/config 文件</h3><p>通过以上步骤，公钥、密钥分别被添加到 git 服务器和本地了。下面我们需要在本地创建一个密钥配置文件，通过该文件，实现根据仓库的 remote 链接地址自动选择合适的私钥。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># 该文件用于配置私钥对应的服务器</span><br><span class="line">Host ggbond6    # 别名，随便定 后面配置地址有用</span><br><span class="line">    HostName ssh.github.com</span><br><span class="line">    User git</span><br><span class="line">    IdentityFile ~/.ssh/id_rsa_ggbond6</span><br><span class="line"># 该文件用于配置私钥对应的服务器</span><br><span class="line">Host ggbondd   # 别名，随便定 后面配置地址有用</span><br><span class="line">    HostName ssh.github.com</span><br><span class="line">    User git</span><br><span class="line">    IdentityFile ~/.ssh/id_rsa_ggbondd</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-测试一下"><a href="#4-测试一下" class="headerlink" title="4. 测试一下"></a>4. 测试一下</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ssh -T git@ggbond6</span><br><span class="line">SSH -T git@ggbondd</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 成功返回</span><br><span class="line">Hi xxx! You’ve successfully authenticated, but GitHub does not provide shell access.</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-本地仓库的用户配置"><a href="#5-本地仓库的用户配置" class="headerlink" title="5. 本地仓库的用户配置"></a>5. 本地仓库的用户配置</h3><p>git 的配置分为三级别，System —&gt; Global —&gt;Local。System 即系统级别，Global 为配置的全局，Local 为仓库级别，优先级是 Local &gt; Global &gt; System。</p>
+<h4 id="查看配置"><a href="#查看配置" class="headerlink" title="查看配置"></a>查看配置</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git config --local -l</span><br><span class="line">git config --global -l</span><br><span class="line">git config --system -l</span><br></pre></td></tr></table></figure>
+
+<h4 id="清除-Git-的全局设置"><a href="#清除-Git-的全局设置" class="headerlink" title="清除 Git 的全局设置"></a>清除 Git 的全局设置</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global --unset user.name</span><br><span class="line">git config --global --unset user.email</span><br></pre></td></tr></table></figure>
+
+<p>因此我们需要为每个仓库单独配置用户名信息，假设我们要配置 github 的某个仓库，进入该仓库后，执行：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --local user.name &quot;ggbondd&quot;</span><br><span class="line">git config --local user.email &quot;ggbondd@aliyun.com&quot;</span><br></pre></td></tr></table></figure>
+
+<p>执行完毕后，通过以下命令查看本仓库的所有配置信息：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config --local -l</span><br></pre></td></tr></table></figure>
+
+<p>至此你已经配置好了 Local 级别的配置了，此时提交该仓库的代码，提交用户名就是你设置的 Local 级别的用户名了</p>
+<h3 id="6-绑定远程库"><a href="#6-绑定远程库" class="headerlink" title="6. 绑定远程库"></a>6. 绑定远程库</h3><p>需要将github.com修改成ggbondd(配置文件中的Host)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git remote add fp git@ggbondd:ggbondd/fucking-physical.git</span><br><span class="line">git branch -M main</span><br><span class="line">git push -u fp main</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git remote add origin git@ggbond6:GGBond6/typora.git</span><br><span class="line">git branch -M main</span><br><span class="line">git push -u origin main</span><br></pre></td></tr></table></figure>
+
+<h1 id="本地仓库"><a href="#本地仓库" class="headerlink" title="本地仓库"></a>本地仓库</h1><p>练习网站：<a target="_blank" rel="noopener" href="https://learngitbranching.js.org/?locale=zh_CN">https://learngitbranching.js.org/?locale=zh_CN</a></p>
+<blockquote>
+<p> <code>reset</code> 可以重新开始</p>
+<p> <code>Esc</code> 可以跳过讲解。</p>
+<p><code>undo</code>可以撤销</p>
+<p><code>hint</code> 显示提示指令</p>
+<p><code>objective</code> 是目标</p>
+</blockquote>
+<h2 id="分支与合并"><a href="#分支与合并" class="headerlink" title="分支与合并"></a>分支与合并</h2><h3 id="分支"><a href="#分支" class="headerlink" title="分支"></a>分支</h3><blockquote>
+<p>主线是main，需要创建一个新的分支bugfix，同时切换到这个bugfix分支</p>
+</blockquote>
+<ol>
+<li><p><code>git branch bugfix</code> 创建bugfix分支</p>
+<p><code>git checkout bugfix</code> 切换到bugfix分支</p>
+</li>
+<li><p><code>git checkout -b bugfix</code>：相比上面的操作更加简洁</p>
+</li>
+</ol>
+<h3 id="合并"><a href="#合并" class="headerlink" title="合并"></a>合并</h3><img src="http://cdn.upeveryday.cn/img/image-20210912211628741.png" alt="image-20210912211628741" style="zoom: 67%;" />
+
+<blockquote>
+<p>上图的两个分支中，每个分支各有一个独立的提交，表明没有任何一个分支包含我们修改的全部内容。我们可以通过合并操作解决这个问题</p>
+</blockquote>
+<h4 id="方法1：git-merge"><a href="#方法1：git-merge" class="headerlink" title="方法1：git merge"></a>方法1：git merge</h4><p><code>git merge bugfix</code>：把bugfix分支合并到当前主线main分支里</p>
+<p>main现在指向一个拥有两个父节点的提交记录；假如从 <code>main</code> 开始沿着箭头向上看，在到达起点的路上会经过所有的提交记录。这意味着 <code>main</code> 包含了对代码库的所有修改</p>
+<img src="http://cdn.upeveryday.cn/img/image-20210912211849553.png" alt="image-20210912211849553" style="zoom: 67%;" />
+
+<p>每个分支都有不同的颜色，而每个提交记录的颜色是所有包含该提交记录的分支的颜色混合之后的颜色。所以，<code>main</code> 分支的颜色被混入到所有的提交记录，但 <code>bugFix</code> 没有。下面咱们让它也改变一下颜色。</p>
+<p><code>git checkout bugfix</code>：将当前主线切换到bugfix分支</p>
+<p><code>git merge main</code>：将main分支合并到主线bugfix分支中</p>
+<img src="http://cdn.upeveryday.cn/img/image-20210912212100050.png" alt="image-20210912212100050" style="zoom: 67%;" />
+
+<p>因为min分支继承自bugfix，那么Git什么都不用做，只需要把bugfix移动到main指向的那个提交记录即可。</p>
+<p>现在所有提交记录的颜色都一样了，这表明每一个分支都包含了代码库的所有修改</p>
+<h4 id="方法2：git-rebase"><a href="#方法2：git-rebase" class="headerlink" title="方法2：git rebase"></a>方法2：git rebase</h4><p>Rebase 实际上就是取出一系列的提交记录，“复制”它们，然后在另外一个地方逐个的放下去。</p>
+<p>Rebase 的优势就是可以创造更<strong>线性</strong>的提交历史，这听上去有些难以理解。如果只允许使用 Rebase 的话，代码库的提交历史将会变得异常清晰。</p>
+<img src="http://cdn.upeveryday.cn/img/image-20210912215223487.png" alt="image-20210912215223487" style="zoom:67%;" />
+
+<blockquote>
+<p>还是准备了两个分支；注意当前所在的分支是 bugFix（星号标识的是当前分支）</p>
+<p>我们想要把 bugFix 分支里的工作直接移到 main 分支上。移动以后会使得两个分支的功能看起来像是按顺序开发，但实际上它们是并行开发的。</p>
+</blockquote>
+<p><code>git rebase main</code>：将main分支合并到主线bugfix分支</p>
+<img src="http://cdn.upeveryday.cn/img/image-20210912215528299.png" alt="image-20210912215528299" style="zoom:67%;" />
+
+<p>注意，提交记录 C3 依然存在（树上那个半透明的节点），而 C3’ 是我们 Rebase 到 main 分支上的 C3 的副本。</p>
+<p>现在唯一的问题就是 main 还没有更新，下面咱们就来更新它吧……</p>
+<p><code>git checkout main</code></p>
+<p><code>git rebase bugfix</code></p>
+<img src="http://cdn.upeveryday.cn/img/image-20210912215907588.png" alt="image-20210912215907588" style="zoom:67%;" />
+
+<h2 id="在项目树上的移动"><a href="#在项目树上的移动" class="headerlink" title="在项目树上的移动"></a>在项目树上的移动</h2><h3 id="HEAD"><a href="#HEAD" class="headerlink" title="HEAD"></a>HEAD</h3><blockquote>
+<p><strong>HEAD是checkout的灵魂</strong>，实现切换分支与新建分支的主要功臣就是在**.git目录下的HEAD引用**</p>
+<p>可以通过<code>cat .git/HEAD</code>查看HEAD的指向，如果 HEAD 指向的是一个引用，还可以用 <code>git symbolic-ref HEAD</code> 查看它的指向</p>
+</blockquote>
+<p>HEAD默认指向分支名， 而分支名指向最近一次提交，都随着提交前进</p>
+<h4 id="分离的HEAD"><a href="#分离的HEAD" class="headerlink" title="分离的HEAD"></a>分离的HEAD</h4><blockquote>
+<p>分离的 HEAD 就是让其指向了某个具体的提交记录而不是分支名</p>
+</blockquote>
+<p>在命令执行之前的状态如下所示：</p>
+<p>HEAD -&gt; main -&gt; C1</p>
+<p>HEAD 指向 main， main 指向 C1</p>
+<img src="http://cdn.upeveryday.cn/img/image-20210912220811979.png" alt="image-20210912220811979" style="zoom:67%;" />
+
+<p>执行 <code>git checkout c1</code></p>
+<img src="http://cdn.upeveryday.cn/img/image-20210912223313005.png" alt="image-20210912223313005" style="zoom:67%;" />
+
+<h4 id="相对引用"><a href="#相对引用" class="headerlink" title="相对引用"></a>相对引用</h4><blockquote>
+<p>通过哈希值指定提交记录很不方便，所以 Git 引入了相对引用</p>
+</blockquote>
+<p>使用相对引用的话，你就可以从一个易于记忆的地方（比如 <code>bugFix</code> 分支或 <code>HEAD</code>）开始计算。</p>
+<p>相对引用非常给力，这里我介绍两个简单的用法：</p>
+<ul>
+<li>使用 <code>^</code> 向上移动 1 个提交记录</li>
+<li>使用 <code>~&lt;num&gt;</code> 向上移动多个提交记录，如 <code>~3</code></li>
+</ul>
+<h5 id="操作符"><a href="#操作符" class="headerlink" title="操作符^"></a>操作符^</h5><p>首先看看操作符 (^)。把这个符号加在引用名称的后面，表示让 Git 寻找指定提交记录的父提交。</p>
+<p>所以 <code>main^</code> 相当于“<code>main</code> 的父节点”。</p>
+<p><code>main^^</code> 是 <code>main</code> 的第二个父节点</p>
+<p>现在咱们切换到 main 的父节点</p>
+<img src="http://cdn.upeveryday.cn/img/image-20210912225547625.png" alt="image-20210912225547625" style="zoom:67%;" />
+
+<p><code>git checkout main^</code></p>
+<img src="http://cdn.upeveryday.cn/img/image-20210912225632694.png" alt="image-20210912225632694" style="zoom:67%;" />
+
+<h5 id="操作符-1"><a href="#操作符-1" class="headerlink" title="操作符~"></a>操作符~</h5><p>如果你想在提交树中向上移动很多步的话，敲那么多 <code>^</code> 貌似也挺烦人的，Git 当然也考虑到了这一点，于是又引入了操作符 <code>~</code>。</p>
+<p>该操作符后面可以跟一个数字（可选，不跟数字时与 <code>^</code> 相同，向上移动一次），指定向上移动多少次。</p>
+<h3 id="强制修改分支位置"><a href="#强制修改分支位置" class="headerlink" title="强制修改分支位置"></a>强制修改分支位置</h3><p>可以直接使用 <code>-f</code> 选项让分支指向另一个提交。例如:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch -f main HEAD~3</span><br></pre></td></tr></table></figure>
+
+<p>上面的命令会将 main 分支强制指向 HEAD 的第 3 级父提交。</p>
+<h3 id="撤销变更"><a href="#撤销变更" class="headerlink" title="撤销变更"></a>撤销变更</h3><p>在 Git 里撤销变更的方法很多。和提交一样，撤销变更由底层部分（暂存区的独立文件或者片段）和上层部分（变更到底是通过哪种方式被撤销的）组成。我们这个应用主要关注的是后者。</p>
+<p>主要有两种方法用来撤销变更 —— 一是 <code>git reset</code>，还有就是 <code>git revert</code>。</p>
+<h4 id="git-reset"><a href="#git-reset" class="headerlink" title="git reset"></a>git reset</h4><p><code>git reset</code> 通过把分支记录回退几个提交记录来实现撤销改动。你可以将这想象成“改写历史”。<code>git reset</code> 向上移动分支，原来指向的提交记录就跟从来没有提交过一样</p>
+<img src="http://cdn.upeveryday.cn/img/image-20210912232700848.png" alt="image-20210912232700848" style="zoom:67%;" />
+
+<p><code>git reset HEAD~1</code></p>
+<img src="http://cdn.upeveryday.cn/img/image-20210912232808092.png" alt="image-20210912232808092" style="zoom:67%;" />
+
+<p>Git 把 main 分支移回到 <code>C1</code>；现在我们的本地代码库根本就不知道有 <code>C2</code> 这个提交了</p>
+<p>在reset后， <code>C2</code> 所做的变更还在，但是处于未加入暂存区状态</p>
+<h4 id="git-revert"><a href="#git-revert" class="headerlink" title="git revert"></a>git revert</h4><p>虽然在你的本地分支中使用 <code>git reset</code> 很方便，但是这种“改写历史”的方法对大家一起使用的远程分支是无效的哦！</p>
+<p>为了撤销更改并<strong>分享这次撤销</strong>给别人，我们需要使用 <code>git revert</code>。</p>
+<img src="http://cdn.upeveryday.cn/img/image-20210912232700848.png" alt="image-20210912232700848" style="zoom:67%;" />
+
+<p><code>git revert HEAD</code></p>
+<img src="http://cdn.upeveryday.cn/img/image-20210912233108418.png" alt="image-20210912233108418" style="zoom:67%;" />
+
+<p>在我们要撤销的提交记录后面居然多了一个新提交！这是因为新提交记录 <code>C2&#39;</code> 引入了<strong>更改</strong> —— 这些更改刚好是用来撤销 <code>C2</code> 这个提交的。也就是说 <code>C2&#39;</code> 的状态与 <code>C1</code> 是相同的。</p>
+<p>revert 之后就可以把你的更改推送到远程仓库与别人分享啦。</p>
+<h2 id="整理提交记录"><a href="#整理提交记录" class="headerlink" title="整理提交记录"></a>整理提交记录</h2><h3 id="git-cherry-pick-lt-提交号-gt"><a href="#git-cherry-pick-lt-提交号-gt" class="headerlink" title="git cherry-pick &lt;提交号&gt;"></a>git cherry-pick &lt;提交号&gt;</h3><blockquote>
+<p>如果你想<strong>将一些提交复制到当前所在的位置（<code>HEAD</code>）下面（且必须当前分支上没有这些提交）</strong>的话， Cherry-pick 是最直接的方式了</p>
+<p>cherry-pick：择优挑选</p>
+</blockquote>
+<img src="http://cdn.upeveryday.cn/img/image-20210913094053606.png" alt="image-20210913094053606" style="zoom:67%;" />
+
+<p>这里有一个仓库, 我们想将 <code>side</code> 分支上的工作复制到 <code>main</code> 分支</p>
+<p><code>git cherry-pick c2 c4</code></p>
+<img src="http://cdn.upeveryday.cn/img/image-20210913094330027.png" alt="image-20210913094330027" style="zoom:67%;" />
+
+<p>我们只需要提交记录 <code>C2</code> 和 <code>C4</code>，所以 Git 就将它们抓过来放到当前分支下了。</p>
+<h3 id="交互式的rebase"><a href="#交互式的rebase" class="headerlink" title="交互式的rebase"></a>交互式的rebase</h3><p>当你知道你所需要的提交记录（并且还知道这些提交记录的哈希值）时, 用 cherry-pick 再好不过了 —— 没有比这更简单的方式了。</p>
+<p>但是如果你<strong>不清楚想要的提交记录的哈希值</strong>呢? 幸好 Git 帮你想到了这一点, 我们可以利用<strong>交互式的 rebase</strong> —— 如果你想<strong>从一系列的提交记录中找到想要的记录,</strong> 这就是最好的方法了</p>
+<p>交互式 rebase 指的是使用带参数 <code>--interactive</code> 的 rebase 命令, 简写为 <code>-i</code></p>
+<p>如果你在命令后增加了这个选项, Git 会打开一个 UI 界面并<strong>列出将要被复制到目标分支的备选提交记录</strong>，它还会显示每个提交记录的哈希值和提交说明，提交说明有助于你理解这个提交进行了哪些更改。</p>
+<p>在实际使用时，所谓的 UI 窗口一般会在文本编辑器 —— 如 Vim 中打开一个文件。</p>
+<p>当 rebase UI界面打开时, 你能做3件事:</p>
+<ul>
+<li>调整提交记录的顺序（通过鼠标拖放来完成）</li>
+<li>删除你不想要的提交（通过切换 <code>pick</code> 的状态来完成，关闭就意味着你不想要这个提交记录）</li>
+<li>合并提交。 它允许你把多个提交记录合并成一个</li>
+</ul>
+<img src="http://cdn.upeveryday.cn/img/image-20210913095622910.png" alt="image-20210913095622910" style="zoom:67%;" />
+
+<p><code>git rebase -i HEAD~4</code></p>
+<img src="http://cdn.upeveryday.cn/img/image-20210913095830843.png" alt="image-20210913095830843" style="zoom: 50%;" />
+
+<img src="http://cdn.upeveryday.cn/img/image-20210913095859179.png" alt="image-20210913095859179" style="zoom:67%;" />
+
+<h2 id="小技巧"><a href="#小技巧" class="headerlink" title="小技巧"></a>小技巧</h2><h3 id="只取一个提交记录"><a href="#只取一个提交记录" class="headerlink" title="只取一个提交记录"></a>只取一个提交记录</h3><p>来看一个在开发中经常会遇到的情况：我正在解决某个特别棘手的 Bug，<strong>为了便于调试而在代码中添加了一些调试命令并向控制台打印了一些信息</strong>。</p>
+<p>这些调试和打印语句都在它们各自的提交记录里。最后我终于找到了造成这个 Bug 的根本原因，解决掉以后觉得沾沾自喜！</p>
+<p>最后就差把 <code>bugFix</code> 分支里的工作合并回 <code>main</code> 分支了。你可以选择通过 fast-forward 快速合并到 <code>main</code> 分支上，但这样的话 <code>main</code> 分支就会包含我这些调试语句了</p>
+<p>实际我们只要让 Git 复制解决问题的那一个提交记录就可以了。跟之前我们在“整理提交记录”中学到的一样，我们可以使用</p>
+<ul>
+<li><code>git rebase -i</code></li>
+<li><code>git cherry-pick</code></li>
+</ul>
+<p>来达到目的。</p>
+<h3 id="提交技巧1"><a href="#提交技巧1" class="headerlink" title="提交技巧1"></a>提交技巧1</h3><blockquote>
+<p>git rebase -i</p>
+</blockquote>
+<p>你之前在 <code>newImage</code> 分支上进行了一次提交，然后又基于它创建了 <code>caption</code> 分支，然后又提交了一次。</p>
+<p>此时你想对某个以前的提交记录进行一些小小的调整。比如设计师想修改一下 <code>newImage</code> 中图片的分辨率，尽管那个提交记录并不是最新的了。</p>
+<p>我们可以通过下面的方法来克服困难：</p>
+<ul>
+<li><p>先用 <code>git rebase -i</code> 将提交重新排序，然后把我们想要修改的提交记录挪到最前</p>
+</li>
+<li><p>然后用 <code>git commit --amend</code> 来进行一些小修改</p>
+<p>git commit –amend命令用来修复最近一次commit. 可以让你合并你缓存区的修改和上一次commit, 而不是提交一个新的快照. 还可以用来编辑上一次的commit描述. 记住amend不是修改最近一次commit, 而是整个替换掉他. 对于Git来说是一个新的commit</p>
+</li>
+<li><p>接着再用 <code>git rebase -i</code> 来将他们调回原来的顺序</p>
+</li>
+<li><p>最后我们把 main 移到修改的最前端（用你自己喜欢的方法），就大功告成啦！</p>
+</li>
+</ul>
+<p>当然完成这个任务的方法不止上面提到的一种（我知道你在看 cherry-pick 啦），最后有必要说明一下目标状态中的那几个<code>&#39;</code> —— 我们把这个提交移动了两次，每移动一次会产生一个 <code>&#39;</code>；而 C2 上多出来的那个是我们在使用了 amend 参数提交时产生的，所以最终结果就是这样了。</p>
+<p>也就是说，我在对比结果的时候只会对比提交树的结构，对于 <code>&#39;</code> 的数量上的不同，并不纳入对比范围内。只要你的 <code>main</code> 分支结构与目标结构相同，我就算你通过。</p>
+<h3 id="提交技巧2"><a href="#提交技巧2" class="headerlink" title="提交技巧2"></a>提交技巧2</h3><blockquote>
+<p>git cherry-pick</p>
+</blockquote>
+<p>cherry-pick 可以将提交树上任何地方的提交记录取过来<strong>追加到 HEAD 上</strong>（只要不是 HEAD 上游的提交就没问题）</p>
+<h3 id="git-tag"><a href="#git-tag" class="headerlink" title="git tag"></a>git tag</h3><p>通过前面的学习，我们发现分支很容易被人为移动，并且当有新的提交时，它也会移动。分支很容易被改变，大部分分支还只是临时的，并且还一直在变。</p>
+<p>那么有没有什么可以<em>永远</em>指向某个提交记录的标识呢，比如软件发布新的大版本，或者是修正一些重要的 Bug 或是增加了某些新特性，有没有比分支更好的可以永远指向这些提交的方法呢？</p>
+<p>Git 的 <strong>tag</strong> 就是干这个用的啊，它们可以（在某种程度上 —— 因为标签可以被删除后重新在另外一个位置创建同名的标签）<strong>永久地将某个特定的提交命名为里程碑</strong>，然后就可以像分支一样引用了。</p>
+<p>更难得的是，<strong>它们并不会随着新的提交而移动</strong>。你也不能检出到某个标签上面进行修改提交，它就像是提交树上的一个锚点，标识了某个特定的位置。</p>
+<img src="http://cdn.upeveryday.cn/img/image-20210913104446451.png" alt="image-20210913104446451" style="zoom:67%;" />
+
+<p>咱们先建立一个标签，指向提交记录 <code>C1</code>，表示这是我们 1.0 版本。如果不指定提交记录，Git 会用 <code>HEAD</code>所指向的位置。</p>
+<p><code>git tag v1 c1</code></p>
+<img src="http://cdn.upeveryday.cn/img/image-20210913104606201.png" alt="image-20210913104606201" style="zoom:67%;" />
+
+<h3 id="git-describe"><a href="#git-describe" class="headerlink" title="git describe"></a>git describe</h3><p>由于标签在代码库中起着“锚点”的作用，Git 还为此专门设计了一个命令用来<strong>描述</strong>离你最近的锚点（也就是标签），它就是 <code>git describe</code>！</p>
+<p>Git Describe 能帮你在提交历史中移动了多次以后找到方向；当你用 <code>git bisect</code>（一个查找产生 Bug 的提交记录的指令）找到某个提交记录时，或者是当你坐在你那刚刚度假回来的同事的电脑前时， 可能会用到这个命令。</p>
+<p><code>git describe</code> 的语法是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git describe &lt;ref&gt;</span><br></pre></td></tr></table></figure>
+
+<p><code>&lt;ref&gt;</code> 可以是任何能被 Git 识别成提交记录的引用，如果你没有指定的话，Git 会以你目前所检出的位置（<code>HEAD</code>）。</p>
+<p>它输出的结果是这样的：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;tag&gt;_&lt;numCommits&gt;_g&lt;hash&gt;</span><br></pre></td></tr></table></figure>
+
+<p><code>tag</code> 表示的是离 <code>ref</code> 最近的标签， <code>numCommits</code> 是表示这个 <code>ref</code> 与 <code>tag</code> 相差有多少个提交记录， <code>hash</code> 表示的是你所给定的 <code>ref</code> 所表示的提交记录哈希值的前几位。</p>
+<p>当 <code>ref</code> 提交记录上有某个标签时，则只输出标签名称</p>
+<img src="http://cdn.upeveryday.cn/img/image-20210913105542351.png" alt="image-20210913105542351" style="zoom:67%;" />
+
+
+
+<p>执行<code>git tag v2 c3</code>命令后：</p>
+<p>执行<code>git describe main</code> 会输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">v1_2_gC2</span><br></pre></td></tr></table></figure>
+
+<p>执行<code>git describe side</code> 会输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">v2_1_gC4</span><br></pre></td></tr></table></figure>
+
+<h1 id="远程仓库"><a href="#远程仓库" class="headerlink" title="远程仓库"></a>远程仓库</h1><h2 id="push-amp-pull"><a href="#push-amp-pull" class="headerlink" title="push &amp; pull"></a>push &amp; pull</h2><h3 id="远程分支"><a href="#远程分支" class="headerlink" title="远程分支"></a>远程分支</h3><p>远程分支有一个特别的属性，在你<strong>检出（checkout）时自动进入分离 HEAD 状态</strong>（HEAD指向一个提交记录而不是分支）。</p>
+<p>Git 这么做是出于<strong>不能直接在这些分支上进行操作的原因</strong>, 你必须在别的地方完成你的工作, （更新了远程分支之后）再用远程分享你的工作成果。</p>
+<p>远程分支有一个<strong>命名规范</strong> —— 它们的格式是:</p>
+<ul>
+<li><code>&lt;remote name&gt;/&lt;branch name&gt;</code></li>
+</ul>
+<p>因此，如果你看到一个名为 <code>o/main</code> 的分支，那么这个分支就叫 <code>main</code>，远程仓库的名称就是 <code>o</code>。</p>
+<p>大多数的开发人员会将它们主要的远程仓库命名为 <code>origin</code>，并不是 <code>o</code>。这是因为当你用 <code>git clone</code> 某个仓库时，Git 已经帮你把远程仓库的名称设置为 <code>origin</code> 了</p>
+<img src="http://cdn.upeveryday.cn/img/image-20210913111159307.png" alt="image-20210913111159307" style="zoom:67%;" />
+
+<p><code>git checkout o/main</code></p>
+<p><code>git commit</code></p>
+<img src="http://cdn.upeveryday.cn/img/image-20210913111259498.png" alt="image-20210913111259498" style="zoom:67%;" />
+
+<p>执行之后，<strong>Git 变成了分离 HEAD 状态，当添加新的提交时 <code>o/main</code> 也不会更新</strong>。这是因为 <code>o/main</code> 只有在远程仓库中相应的分支更新了以后才会更新。</p>
+<h4 id="本地新分支xxx推送到远程分支"><a href="#本地新分支xxx推送到远程分支" class="headerlink" title="本地新分支xxx推送到远程分支"></a>本地新分支xxx推送到远程分支</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git checkout xxx</span><br><span class="line">git push -u chatroom xxx</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="git-fetch"><a href="#git-fetch" class="headerlink" title="git fetch"></a>git fetch</h3><blockquote>
+<p>拉取远程仓库的更新到本地的远程分支</p>
+</blockquote>
+<p>Git 远程仓库相当的操作实际可以归纳为两点：<strong>向远程仓库传输数据以及从远程仓库获取数据</strong>。</p>
+<p>既然我们能与远程仓库同步，那么就可以分享任何能被 Git 管理的更新（因此可以分享代码、文件、想法、情书等等）。</p>
+<p>如何从远程仓库<strong>获取数据</strong> —— 命令如其名，它就是 <code>git fetch</code>。</p>
+<img src="http://cdn.upeveryday.cn/img/image-20210913112022943.png" alt="image-20210913112022943" style="zoom:67%;" />
+
+<p>上图中有一个远程仓库，它有2个我们本地仓库中没有的</p>
+<p>执行<code>git fetch</code>之后，<code>C2</code>,<code>C3</code> 被下载到了本地仓库，<strong>同时远程分支 <code>o/main</code> 也被更新</strong></p>
+<img src="http://cdn.upeveryday.cn/img/image-20210913163512546.png" alt="image-20210913163512546" style="zoom:67%;" />
+
+<h4 id="git-fetch做的事情"><a href="#git-fetch做的事情" class="headerlink" title="git fetch做的事情"></a>git fetch做的事情</h4><p><code>git fetch</code> 完成了仅有的但是很重要的两步:</p>
+<ul>
+<li>从远程仓库下载本地仓库中缺失的提交记录</li>
+<li>更新远程分支指针(如 <code>o/main</code>)</li>
+</ul>
+<p><code>git fetch</code> 实际上<strong>将本地仓库中的远程分支更新成了远程仓库相应分支最新的状态</strong>。</p>
+<p>如果你还记得上一节课程中我们说过的，远程分支反映了远程仓库在你<strong>最后一次与它通信时</strong>的状态，<code>git fetch</code> 就是你与远程仓库通信的方式了！</p>
+<p><code>git fetch</code> 通常通过互联网（使用 <code>http://</code> 或 <code>git://</code> 协议) 与远程仓库通信。</p>
+<h4 id="git-fetch不会做的事情"><a href="#git-fetch不会做的事情" class="headerlink" title="git fetch不会做的事情"></a>git fetch不会做的事情</h4><p><code>git fetch</code> 并不会改变你本地仓库的状态。<strong>它不会更新你的 <code>main</code> 分支</strong>，也不会修改你磁盘上的文件。</p>
+<p>理解这一点很重要，因为许多开发人员误以为执行了 <code>git fetch</code> 以后，他们本地仓库就与远程仓库同步了。它可能已经将进行这一操作所需的所有数据都下载了下来，但是<strong>并没有</strong>修改你本地的文件。</p>
+<p>所以,<strong>可以将 <code>git fetch</code> 的理解为单纯的下载操作</strong>。</p>
+<h3 id="git-pull"><a href="#git-pull" class="headerlink" title="git pull"></a>git pull</h3><p>当<strong>远程分支中有新的提交时</strong>，你可以像合并本地分支那样来合并远程分支。也就是说就是你可以执行以下命令:</p>
+<ul>
+<li><code>git cherry-pick o/main</code></li>
+<li><code>git rebase o/main</code></li>
+<li><code>git merge o/main</code></li>
+<li>等等</li>
+</ul>
+<p>实际上，由于先抓取更新再合并到本地分支这个流程很常用，因此 Git <strong>提供了一个专门的命令来完成这两个操作</strong>。它就是我们要讲的 <code>git pull</code>。</p>
+<p>我们先来看看 <code>fetch</code>、<code>merge</code> 依次执行的效果</p>
+<img src="http://cdn.upeveryday.cn/img/image-20210913164542616.png" alt="image-20210913164542616" style="zoom:67%;" />
+
+<p><code>git fetch</code>：将远程仓库的新提交拉取到本地的远程分支</p>
+<p><code>git merge o/main</code>：将远程分支o/main合并到主线分支main</p>
+<img src="http://cdn.upeveryday.cn/img/image-20210913164711487.png" alt="image-20210913164711487" style="zoom: 80%;" />
+
+<p>我们用 <code>fetch</code> 下载了 <code>C3</code>, 然后通过 <code>git merge o/main</code> 合并了这一提交记录。现在我们的 <code>main</code> 分支包含了远程仓库中的更新（在本例中远程仓库名为 <code>origin</code>）</p>
+<h4 id="git-pull包含的简写"><a href="#git-pull包含的简写" class="headerlink" title="git pull包含的简写"></a>git pull包含的简写</h4><ol>
+<li><strong><code>git pull</code> 就是 git fetch 和 git merge 的缩写</strong></li>
+<li><strong><code>git pull --rebase</code> 就是 fetch 和 rebase 的简写</strong></li>
+</ol>
+<h3 id="git-push"><a href="#git-push" class="headerlink" title="git push"></a>git push</h3><p><code>git push</code> 不带任何参数时的行为与 Git 的一个名为 <code>push.default</code> 的配置有关。它的默认值取决于你正使用的 Git 的版本，但是在教程中我们使用的是 <code>upstream</code>。 这没什么太大的影响，但是在你的项目中进行推送之前，最好检查一下这个配置</p>
+<img src="http://cdn.upeveryday.cn/img/image-20210913171209433.png" alt="image-20210913171209433" style="zoom:67%;" />
+
+<p><code>git push</code></p>
+<img src="http://cdn.upeveryday.cn/img/image-20210913171254633.png" alt="image-20210913171254633" style="zoom:67%;" />
+
+<p>远程仓库接收了 <code>C2</code>，远程仓库中的 <code>main</code> 分支也被更新到指向 <code>C2</code> 了，我们的远程分支 (o/main) 也同样被更新了。<strong>所有的分支都同步了</strong>！</p>
+<h3 id="远程服务器拒绝-Remote-Rejected"><a href="#远程服务器拒绝-Remote-Rejected" class="headerlink" title="远程服务器拒绝(Remote Rejected)"></a>远程服务器拒绝(Remote Rejected)</h3><p>如果你是在一个大的合作团队中工作, 很可能是main被锁定了, 需要一些Pull Request流程来合并修改。如果你直接提交(commit)到本地main, 然后试图推送(push)修改, 你将会收到这样类似的信息:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">! [远程服务器拒绝] main -&gt; main (TF402455: 不允许推送(push)这个分支; 你必须使用pull request来更新这个分支.)</span><br></pre></td></tr></table></figure>
+
+<p>远程服务器拒绝直接推送(push)提交到main, 因为策略配置要求 pull requests 来提交更新.</p>
+<p>你应该按照流程,新建一个分支, 推送(push)这个分支并申请pull request,但是你忘记并直接提交给了main.现在你卡住并且无法推送你的更新.</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">GGBond</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://upeveryday.cn/2023/01/05/Git/git/">https://upeveryday.cn/2023/01/05/Git/git/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://upeveryday.cn" target="_blank">GGBond's Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/technology/">technology</a></div><div class="post_share"><div class="social-share" data-image="https://dn-coding-net-production-pp.codehub.cn/d4d43177-bb4b-4ae3-aca9-af11bf1a1693.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/01/05/Courses/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/"><img class="prev-cover" src="https://tse1-mm.cn.bing.net/th/id/OIP-C.Et8PVWhmSbh4oSmK9Nd3hAHaFj?w=184&amp;h=180&amp;c=7&amp;r=0&amp;o=5&amp;pid=1.7" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">软件工程期末知识总结</div></div></a></div><div class="next-post pull-right"><a href="/2023/01/05/frontend/Vue/"><img class="next-cover" src="https://cdn-media-1.freecodecamp.org/ghost/2019/03/vueart.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Vue全家桶</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2023/01/05/Courses/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/" title="软件工程期末知识总结"><img class="cover" src="https://tse1-mm.cn.bing.net/th/id/OIP-C.Et8PVWhmSbh4oSmK9Nd3hAHaFj?w=184&h=180&c=7&r=0&o=5&pid=1.7" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-01-05</div><div class="title">软件工程期末知识总结</div></div></a></div><div><a href="/2023/01/05/frontend/Vue/" title="Vue全家桶"><img class="cover" src="https://cdn-media-1.freecodecamp.org/ghost/2019/03/vueart.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-01-05</div><div class="title">Vue全家桶</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="lv-container" data-id="city" data-uid="MTAyMC81NDQ5Ny8zMDk2OA=="></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Git"><span class="toc-number">1.</span> <span class="toc-text">Git</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Git%E7%AE%80%E4%BB%8B"><span class="toc-number">1.1.</span> <span class="toc-text">1. Git简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Git%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="toc-number">1.2.</span> <span class="toc-text">2. Git工作流程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#clone%E4%B8%8Epull%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">1.2.1.</span> <span class="toc-text">clone与pull的区别</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%89%88%E6%9C%AC%E5%9B%9E%E9%80%80"><span class="toc-number">1.3.</span> <span class="toc-text">版本回退</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A5%E4%BD%9C%E5%8C%BA%E5%92%8C%E7%89%88%E6%9C%AC%E5%BA%93"><span class="toc-number">1.4.</span> <span class="toc-text">工作区和版本库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%92%A4%E9%94%80%E4%BF%AE%E6%94%B9"><span class="toc-number">1.5.</span> <span class="toc-text">撤销修改</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E6%96%87%E4%BB%B6"><span class="toc-number">1.6.</span> <span class="toc-text">删除文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E8%BF%9C%E7%A8%8B%E5%BA%93"><span class="toc-number">1.7.</span> <span class="toc-text">添加远程库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E8%81%94-amp-%E6%8F%90%E4%BA%A4%E8%BF%9C%E7%A8%8B%E5%BA%93"><span class="toc-number">1.8.</span> <span class="toc-text">关联&amp;提交远程库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E7%BB%91%E8%BF%9C%E7%A8%8B%E5%BA%93"><span class="toc-number">1.9.</span> <span class="toc-text">解绑远程库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%8B%E9%9A%86%E8%BF%9C%E7%A8%8B%E5%BA%93"><span class="toc-number">1.10.</span> <span class="toc-text">克隆远程库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E6%94%AF%E7%AE%A1%E7%90%86"><span class="toc-number">1.11.</span> <span class="toc-text">分支管理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%8C%E4%B8%80%E5%AE%A2%E6%88%B7%E7%AB%AF%E4%B8%8B%E4%BD%BF%E7%94%A8%E5%A4%9A%E4%B8%AAgit%E8%B4%A6%E5%8F%B7"><span class="toc-number">1.12.</span> <span class="toc-text">同一客户端下使用多个git账号</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E7%94%9F%E6%88%90%E6%96%B0%E7%9A%84-SSH-keys"><span class="toc-number">1.12.1.</span> <span class="toc-text">1. 生成新的 SSH keys</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%B0%86%E5%85%AC%E9%92%A5%E6%B7%BB%E5%8A%A0%E5%88%B0GitHub%E7%9A%84-SSH-%E8%AE%BE%E7%BD%AE%E4%B8%AD"><span class="toc-number">1.12.2.</span> <span class="toc-text">2. 将公钥添加到GitHub的 SSH 设置中</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E9%85%8D%E7%BD%AE-ssh-config-%E6%96%87%E4%BB%B6"><span class="toc-number">1.12.3.</span> <span class="toc-text">3. 配置 ~&#x2F;.ssh&#x2F;config 文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E6%B5%8B%E8%AF%95%E4%B8%80%E4%B8%8B"><span class="toc-number">1.12.4.</span> <span class="toc-text">4. 测试一下</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E6%9C%AC%E5%9C%B0%E4%BB%93%E5%BA%93%E7%9A%84%E7%94%A8%E6%88%B7%E9%85%8D%E7%BD%AE"><span class="toc-number">1.12.5.</span> <span class="toc-text">5. 本地仓库的用户配置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E9%85%8D%E7%BD%AE"><span class="toc-number">1.12.5.1.</span> <span class="toc-text">查看配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B8%85%E9%99%A4-Git-%E7%9A%84%E5%85%A8%E5%B1%80%E8%AE%BE%E7%BD%AE"><span class="toc-number">1.12.5.2.</span> <span class="toc-text">清除 Git 的全局设置</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-%E7%BB%91%E5%AE%9A%E8%BF%9C%E7%A8%8B%E5%BA%93"><span class="toc-number">1.12.6.</span> <span class="toc-text">6. 绑定远程库</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9C%AC%E5%9C%B0%E4%BB%93%E5%BA%93"><span class="toc-number">2.</span> <span class="toc-text">本地仓库</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E6%94%AF%E4%B8%8E%E5%90%88%E5%B9%B6"><span class="toc-number">2.1.</span> <span class="toc-text">分支与合并</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E6%94%AF"><span class="toc-number">2.1.1.</span> <span class="toc-text">分支</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%88%E5%B9%B6"><span class="toc-number">2.1.2.</span> <span class="toc-text">合并</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%B9%E6%B3%951%EF%BC%9Agit-merge"><span class="toc-number">2.1.2.1.</span> <span class="toc-text">方法1：git merge</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%B9%E6%B3%952%EF%BC%9Agit-rebase"><span class="toc-number">2.1.2.2.</span> <span class="toc-text">方法2：git rebase</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%A8%E9%A1%B9%E7%9B%AE%E6%A0%91%E4%B8%8A%E7%9A%84%E7%A7%BB%E5%8A%A8"><span class="toc-number">2.2.</span> <span class="toc-text">在项目树上的移动</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#HEAD"><span class="toc-number">2.2.1.</span> <span class="toc-text">HEAD</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%86%E7%A6%BB%E7%9A%84HEAD"><span class="toc-number">2.2.1.1.</span> <span class="toc-text">分离的HEAD</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%9B%B8%E5%AF%B9%E5%BC%95%E7%94%A8"><span class="toc-number">2.2.1.2.</span> <span class="toc-text">相对引用</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%93%8D%E4%BD%9C%E7%AC%A6"><span class="toc-number">2.2.1.2.1.</span> <span class="toc-text">操作符^</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%93%8D%E4%BD%9C%E7%AC%A6-1"><span class="toc-number">2.2.1.2.2.</span> <span class="toc-text">操作符~</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%BA%E5%88%B6%E4%BF%AE%E6%94%B9%E5%88%86%E6%94%AF%E4%BD%8D%E7%BD%AE"><span class="toc-number">2.2.2.</span> <span class="toc-text">强制修改分支位置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%92%A4%E9%94%80%E5%8F%98%E6%9B%B4"><span class="toc-number">2.2.3.</span> <span class="toc-text">撤销变更</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#git-reset"><span class="toc-number">2.2.3.1.</span> <span class="toc-text">git reset</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#git-revert"><span class="toc-number">2.2.3.2.</span> <span class="toc-text">git revert</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B4%E7%90%86%E6%8F%90%E4%BA%A4%E8%AE%B0%E5%BD%95"><span class="toc-number">2.3.</span> <span class="toc-text">整理提交记录</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#git-cherry-pick-lt-%E6%8F%90%E4%BA%A4%E5%8F%B7-gt"><span class="toc-number">2.3.1.</span> <span class="toc-text">git cherry-pick &lt;提交号&gt;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%A4%E4%BA%92%E5%BC%8F%E7%9A%84rebase"><span class="toc-number">2.3.2.</span> <span class="toc-text">交互式的rebase</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%8F%E6%8A%80%E5%B7%A7"><span class="toc-number">2.4.</span> <span class="toc-text">小技巧</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%AA%E5%8F%96%E4%B8%80%E4%B8%AA%E6%8F%90%E4%BA%A4%E8%AE%B0%E5%BD%95"><span class="toc-number">2.4.1.</span> <span class="toc-text">只取一个提交记录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8F%90%E4%BA%A4%E6%8A%80%E5%B7%A71"><span class="toc-number">2.4.2.</span> <span class="toc-text">提交技巧1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8F%90%E4%BA%A4%E6%8A%80%E5%B7%A72"><span class="toc-number">2.4.3.</span> <span class="toc-text">提交技巧2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#git-tag"><span class="toc-number">2.4.4.</span> <span class="toc-text">git tag</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#git-describe"><span class="toc-number">2.4.5.</span> <span class="toc-text">git describe</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93"><span class="toc-number">3.</span> <span class="toc-text">远程仓库</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#push-amp-pull"><span class="toc-number">3.1.</span> <span class="toc-text">push &amp; pull</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9C%E7%A8%8B%E5%88%86%E6%94%AF"><span class="toc-number">3.1.1.</span> <span class="toc-text">远程分支</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9C%AC%E5%9C%B0%E6%96%B0%E5%88%86%E6%94%AFxxx%E6%8E%A8%E9%80%81%E5%88%B0%E8%BF%9C%E7%A8%8B%E5%88%86%E6%94%AF"><span class="toc-number">3.1.1.1.</span> <span class="toc-text">本地新分支xxx推送到远程分支</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#git-fetch"><span class="toc-number">3.1.2.</span> <span class="toc-text">git fetch</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#git-fetch%E5%81%9A%E7%9A%84%E4%BA%8B%E6%83%85"><span class="toc-number">3.1.2.1.</span> <span class="toc-text">git fetch做的事情</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#git-fetch%E4%B8%8D%E4%BC%9A%E5%81%9A%E7%9A%84%E4%BA%8B%E6%83%85"><span class="toc-number">3.1.2.2.</span> <span class="toc-text">git fetch不会做的事情</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#git-pull"><span class="toc-number">3.1.3.</span> <span class="toc-text">git pull</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#git-pull%E5%8C%85%E5%90%AB%E7%9A%84%E7%AE%80%E5%86%99"><span class="toc-number">3.1.3.1.</span> <span class="toc-text">git pull包含的简写</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#git-push"><span class="toc-number">3.1.4.</span> <span class="toc-text">git push</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9C%E7%A8%8B%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%8B%92%E7%BB%9D-Remote-Rejected"><span class="toc-number">3.1.5.</span> <span class="toc-text">远程服务器拒绝(Remote Rejected)</span></a></li></ol></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2021 - 2023 By GGBond</div><div class="footer_custom_text"><img src="/img/footer.png"><a href="https://www.beian.miit.gov.cn/" target="_blank">鲁ICP备-2021006558号</a><br>你我山前没相见，山后来相逢</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>function loadLivere () {
+  if (typeof LivereTower === 'object') {
+    window.LivereTower.init()
+  }
+  else {
+    (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+    })(document, 'script');
+  }
+}
+
+if ('Livere' === 'Livere' || !false) {
+  if (false) btf.loadComment(document.getElementById('lv-container'), loadLivere)
+  else loadLivere()
+}
+else {
+  function loadOtherComment () {
+    loadLivere()
+  }
+}</script></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="true"></script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = [
+  'title',
+  '#config-diff',
+  '#body-wrap',
+  '#rightside-config-hide',
+  '#rightside-config-show',
+  '.js-pjax'
+]
+
+if (true) {
+  pjaxSelectors.unshift('meta[property="og:image"]', 'meta[property="og:title"]', 'meta[property="og:url"]')
+}
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.removeEventListener('scroll', window.tocScrollFn)
+  window.removeEventListener('scroll', scrollCollect)
+
+  typeof preloader === 'object' && preloader.initLoading()
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // Analytics
+  if (false) {
+    MtaH5.pgv()
+  }
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+
+  typeof preloader === 'object' && preloader.endLoading()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
